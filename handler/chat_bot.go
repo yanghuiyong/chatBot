@@ -14,7 +14,7 @@ func GetChatReplay(c *gin.Context) {
 		"value": c.Query("aa"),
 	}
 	zaplog.Trace("GetChatReplayRequest").Info("GetChatReplay", zap.String("req", c.Query("question")))
-	chat := chatgpt.New(c.Query("appkey"), "zhangsan", 10*time.Second)
+	chat := chatgpt.New("ssk-f8FrNe4jvqSuCHaYevm0T3BlbkFJ9uhXfblTHj6xvjZmkHzg", "zhangsan", 10*time.Second)
 	defer chat.Close()
 	answer, err := chat.ChatWithContext(c.Query("question"))
 	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("err", err), zap.Error(err))
