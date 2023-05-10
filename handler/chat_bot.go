@@ -15,10 +15,14 @@ import (
 )
 
 var RandomSliceApiKey = []string{
-	"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",
-	"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",
-	"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",
-	"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",
+	"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",
+	"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",
+	"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",
+	"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",
+	"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",
+	"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",
+	"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",
+	"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",
 }
 
 func GetChatReplay(c *gin.Context) {
