@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"time"
 )
@@ -25,9 +26,9 @@ func GetChatReplay(c *gin.Context) {
 		"ret":   0,
 		"value": c.Query("aa"),
 	}
-	/*rand.Seed(time.Now().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 	num := rand.Intn(4)
-	apiKeys := RandomSliceApiKey[num]*/
+	apiKeys := RandomSliceApiKey[num]
 	/*client := openai.NewClient("sk-pKHZD1fLYqXDjjsdsdsdUvIODTT3ssjdfadsJC2gTuqqhTum")
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
@@ -47,7 +48,7 @@ func GetChatReplay(c *gin.Context) {
 		return
 	}*/
 
-	msg, err := Completions(c.Query("question"))
+	msg, err := Completions(c.Query("question"), apiKeys)
 
 	//fmt.Println(resp.Choices[0].Message.Content)
 	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("sReq", jData), zap.Any("err", err), zap.Error(err))
@@ -140,8 +141,7 @@ type ChatGPTErrorBody struct {
 	Error map[string]interface{} `json:"error"`
 }
 
-func Completions(msg string) (string, error) {
-	apiKey := "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"
+func Completions(msg, chatApiKey string) (string, error) {
 	var messages []ChatMessage
 	messages = append(messages, ChatMessage{
 		Role:    "system",
@@ -182,7 +182,7 @@ func Completions(msg string) (string, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", apiKey))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", chatApiKey))
 	client := &http.Client{}
 	response, err := client.Do(req)
 	if err != nil {
