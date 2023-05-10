@@ -14,7 +14,7 @@ func GetChatReplay(c *gin.Context) {
 		"ret":   0,
 		"value": c.Query("aa"),
 	}
-	client := openai.NewClient("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")
+	client := openai.NewClient("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")
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
