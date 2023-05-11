@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bytes"
+	"chatBot/logic"
 	"chatBot/until/zaplog"
 	"encoding/json"
 	"fmt"
@@ -14,13 +15,7 @@ import (
 )
 
 var RandomSliceApiKey = []string{
-	"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",
-	"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",
-	"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",
-	"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",
-	"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",
-	"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",
-	"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",
+
 	"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",
 }
 
@@ -30,20 +25,26 @@ func GetChatReplay(c *gin.Context) {
 		"errMsg":  "",
 		"message": "",
 	}
-	/*rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(4)
-	apiKeys := RandomSliceApiKey[num]*/
-	msg, err := Completions(c.Query("question"), "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")
+
+	apiKey, err := logic.GetChatApiKey()
+	if err != nil {
+		jData["ret"] = 10055
+		jData["errMsg"] = err.Error()
+		c.JSONP(200, jData)
+		return
+	}
+	zaplog.Trace("GetChatReplayRequest").Info("GetGptKey", zap.Any("apiKey", apiKey))
+	/*msg, err := Completions(c.Query("question"), apiKey)
 	fmt.Println("You:", c.Query("question"))
 	fmt.Println("Bot:", msg)
-	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("sReq", jData), zap.Any("err", err), zap.Error(err))
+	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("sReq", jData), zap.Any("err", err), zap.Error(err))*/
 	if err != nil {
 		jData["ret"] = 10052
 		jData["errMsg"] = err.Error()
 		c.JSONP(200, jData)
 		return
 	}
-	jData["message"] = msg
+	jData["message"] = "not thing"
 	c.JSONP(200, jData)
 	return
 }

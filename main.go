@@ -2,6 +2,7 @@ package main
 
 import (
 	"chatBot/router"
+	redisPool "chatBot/until/redis"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -32,5 +33,6 @@ func main() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+	redisPool.Init()
 	s.ListenAndServe()
 }
