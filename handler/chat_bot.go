@@ -9,7 +9,6 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"time"
 )
@@ -27,34 +26,16 @@ var RandomSliceApiKey = []string{
 
 func GetChatReplay(c *gin.Context) {
 	jData := map[string]interface{}{
-		"ret":   0,
-		"value": c.Query("aa"),
+		"ret":     0,
+		"errMsg":  "",
+		"message": "",
 	}
-	rand.Seed(time.Now().UnixNano())
+	/*rand.Seed(time.Now().UnixNano())
 	num := rand.Intn(4)
-	apiKeys := RandomSliceApiKey[num]
-	/*client := openai.NewClient("sk-pKHZD1fLYqXDjjsdsdsdUvIODTT3ssjdfadsJC2gTuqqhTum")
-	resp, err := client.CreateChatCompletion(
-		context.Background(),
-		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: c.Query("question"),
-				},
-			},
-		},
-	)
-
-	if err != nil {
-		fmt.Printf("ChatCompletion error: %v\n", err)
-		return
-	}*/
-
-	msg, err := Completions(c.Query("question"), apiKeys)
-
-	//fmt.Println(resp.Choices[0].Message.Content)
+	apiKeys := RandomSliceApiKey[num]*/
+	msg, err := Completions(c.Query("question"), "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")
+	fmt.Println("You:", c.Query("question"))
+	fmt.Println("Bot:", msg)
 	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("sReq", jData), zap.Any("err", err), zap.Error(err))
 	if err != nil {
 		jData["ret"] = 10052
@@ -62,7 +43,7 @@ func GetChatReplay(c *gin.Context) {
 		c.JSONP(200, jData)
 		return
 	}
-	jData["value"] = msg
+	jData["message"] = msg
 	c.JSONP(200, jData)
 	return
 }
