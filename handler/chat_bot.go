@@ -14,11 +14,6 @@ import (
 	"time"
 )
 
-var RandomSliceApiKey = []string{
-
-	"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",
-}
-
 func GetChatReplay(c *gin.Context) {
 	jData := map[string]interface{}{
 		"ret":     0,
@@ -34,17 +29,17 @@ func GetChatReplay(c *gin.Context) {
 		return
 	}
 	zaplog.Trace("GetChatReplayRequest").Info("GetGptKey", zap.Any("apiKey", apiKey))
-	/*msg, err := Completions(c.Query("question"), apiKey)
-	fmt.Println("You:", c.Query("question"))
-	fmt.Println("Bot:", msg)
-	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("sReq", jData), zap.Any("err", err), zap.Error(err))*/
+	msg, err := Completions(c.Query("question"), apiKey)
+	/*fmt.Println("You:", c.Query("question"))
+	fmt.Println("Bot:", msg)*/
+	zaplog.Trace("GetChatReplayRequest").Info("GetGpt", zap.Any("sReq", jData), zap.Any("err", err), zap.Error(err))
 	if err != nil {
 		jData["ret"] = 10052
 		jData["errMsg"] = err.Error()
 		c.JSONP(200, jData)
 		return
 	}
-	jData["message"] = "not thing"
+	jData["message"] = msg
 	c.JSONP(200, jData)
 	return
 }
